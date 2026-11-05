@@ -1,0 +1,5 @@
+/frontend/.env
+/frontend/.env.*
+!/frontend/.env.example
+/frontend/.expo/
+/frontend/node_modules/

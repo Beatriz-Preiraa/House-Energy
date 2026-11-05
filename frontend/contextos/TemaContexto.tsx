@@ -1,5 +1,4 @@
-
-import { createContext, useContext, useState, ReactNode } from "react";
+import { createContext, useContext, useEffect, useState, ReactNode } from "react";
 import { temaClaro, temaEscuro } from "../estilos/temas";
 
 type TemaContextoTipo = {
@@ -11,7 +10,17 @@ type TemaContextoTipo = {
 const TemaContexto = createContext<TemaContextoTipo | undefined>(undefined);
 
 export function TemaProvider({ children }: { children: ReactNode }) {
-  const [modoEscuro, definirModoEscuro] = useState(false);
+  const [modoEscuro, definirModoEscuro] = useState(() => {
+    const temaSalvo = localStorage.getItem("houseenergy-tema");
+    return temaSalvo === "escuro";
+  });
+
+  useEffect(() => {
+    localStorage.setItem(
+      "houseenergy-tema",
+      modoEscuro ? "escuro" : "claro"
+    );
+  }, [modoEscuro]);
 
   const temaAtual = modoEscuro ? temaEscuro : temaClaro;
 

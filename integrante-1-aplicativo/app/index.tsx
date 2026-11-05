@@ -1,7 +1,9 @@
 
+import { temaClaro, temaEscuro } from "../estilos/temas";
 import { useCallback, useEffect, useState } from "react";
 import {
   ActivityIndicator,
+  Pressable,
   RefreshControl,
   ScrollView,
   StyleSheet,
@@ -65,6 +67,11 @@ const leiturasDemonstrativas: Leitura[] = [
 ];
 
 export default function TelaInicial() {
+  const [modoEscuro, definirModoEscuro] = useState(false);
+
+  const temaAtual = modoEscuro ? temaEscuro : temaClaro;
+  const estilos = criarEstilos(temaAtual);
+
   const [resumo, definirResumo] = useState<DadosResumo>(
     resumoDemonstrativo
   );
@@ -130,6 +137,7 @@ export default function TelaInicial() {
         <RefreshControl
           refreshing={carregando}
           onRefresh={atualizarPainel}
+          tintColor={temaAtual.verde}
         />
       }
     >
@@ -138,14 +146,32 @@ export default function TelaInicial() {
           <Text style={estilos.saudacao}>
             Olá, seja bem-vinda!
           </Text>
-          <Text style={estilos.data}>{dataAtual}</Text>
+
+          <Text style={estilos.data}>
+            {dataAtual}
+          </Text>
         </View>
 
-        <Text style={estilos.iconeConfiguracao}>⚙</Text>
+        <Pressable
+          style={estilos.botaoTema}
+          onPress={() => definirModoEscuro(!modoEscuro)}
+          accessibilityRole="button"
+          accessibilityLabel={
+            modoEscuro
+              ? "Ativar modo claro"
+              : "Ativar modo escuro"
+          }
+        >
+          <Text style={estilos.iconeTema}>
+            {modoEscuro ? "☀" : "☾"}
+          </Text>
+        </Pressable>
       </View>
 
       {erro ? (
-        <Text style={estilos.aviso}>{erro}</Text>
+        <Text style={estilos.aviso}>
+          {erro}
+        </Text>
       ) : null}
 
       <View style={estilos.cartaoConsumo}>
@@ -153,7 +179,10 @@ export default function TelaInicial() {
           <Text style={estilos.rotuloPrincipal}>
             Consumo total de energia
           </Text>
-          <Text style={estilos.iconeRaio}>ϟ</Text>
+
+          <Text style={estilos.iconeRaio}>
+            ϟ
+          </Text>
         </View>
 
         <Text style={estilos.valorPrincipal}>
@@ -186,6 +215,7 @@ export default function TelaInicial() {
                     { height: altura }
                   ]}
                 />
+
                 <Text style={estilos.textoGrafico}>
                   {leitura.eletrodomestico}
                 </Text>
@@ -200,6 +230,7 @@ export default function TelaInicial() {
           <Text style={estilos.rotuloCartaoClaro}>
             Custo registrado
           </Text>
+
           <Text style={estilos.valorCartaoClaro}>
             R$ {resumo.custo_total_reais.toFixed(2)}
           </Text>
@@ -209,6 +240,7 @@ export default function TelaInicial() {
           <Text style={estilos.rotuloCartaoClaro}>
             Alertas de consumo
           </Text>
+
           <Text style={estilos.valorCartaoClaro}>
             {resumo.quantidade_anomalias}
           </Text>
@@ -216,7 +248,9 @@ export default function TelaInicial() {
       </View>
 
       <View style={estilos.cartaoPrevisao}>
-        <Text style={estilos.rotulo}>Previsão de custo mensal</Text>
+        <Text style={estilos.rotulo}>
+          Previsão de custo mensal
+        </Text>
 
         <Text style={estilos.valorPrevisao}>
           R$ {previsao.custo_estimado_mes_reais.toFixed(2)}
@@ -232,7 +266,9 @@ export default function TelaInicial() {
           Últimas leituras
         </Text>
 
-        {carregando ? <ActivityIndicator color="#83BF55" /> : null}
+        {carregando ? (
+          <ActivityIndicator color={temaAtual.verde} />
+        ) : null}
       </View>
 
       {leituras.slice(0, 8).map((leitura) => (
@@ -267,220 +303,230 @@ export default function TelaInicial() {
   );
 }
 
-const estilos = StyleSheet.create({
-  pagina: {
-    flex: 1,
-    backgroundColor: "#F5F5F5"
-  },
+function criarEstilos(tema: typeof temaClaro) {
+  return StyleSheet.create({
+    pagina: {
+      flex: 1,
+      backgroundColor: tema.fundo
+    },
 
-  conteudo: {
-    padding: 20,
-    paddingTop: 35,
-    gap: 16
-  },
+    conteudo: {
+      padding: 20,
+      paddingTop: 35,
+      gap: 16
+    },
 
-  cabecalho: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between"
-  },
+    cabecalho: {
+      flexDirection: "row",
+      alignItems: "center",
+      justifyContent: "space-between"
+    },
 
-  saudacao: {
-    fontSize: 23,
-    fontWeight: "700",
-    color: "#171717"
-  },
+    saudacao: {
+      fontSize: 23,
+      fontWeight: "700",
+      color: tema.texto
+    },
 
-  data: {
-    fontSize: 13,
-    color: "#888888",
-    marginTop: 5
-  },
+    data: {
+      fontSize: 13,
+      color: tema.textoSecundario,
+      marginTop: 5
+    },
 
-  iconeConfiguracao: {
-    fontSize: 25,
-    color: "#777777"
-  },
+    botaoTema: {
+      padding: 10,
+      borderRadius: 12,
+      backgroundColor: tema.cartao,
+      alignItems: "center",
+      justifyContent: "center"
+    },
 
-  aviso: {
-    backgroundColor: "#FFF2CC",
-    color: "#72551A",
-    padding: 12,
-    borderRadius: 10,
-    fontSize: 12
-  },
+    iconeTema: {
+      fontSize: 25,
+      color: tema.texto
+    },
 
-  cartaoConsumo: {
-    backgroundColor: "#E9DEFF",
-    borderRadius: 22,
-    padding: 20,
-    gap: 10
-  },
+    aviso: {
+      backgroundColor: tema.alertaFundo,
+      color: tema.alertaTexto,
+      padding: 12,
+      borderRadius: 10,
+      fontSize: 12
+    },
 
-  linha: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center"
-  },
+    cartaoConsumo: {
+      backgroundColor: tema.roxo,
+      borderRadius: 22,
+      padding: 20,
+      gap: 10
+    },
 
-  rotuloPrincipal: {
-    fontSize: 16,
-    fontWeight: "600",
-    color: "#292044"
-  },
+    linha: {
+      flexDirection: "row",
+      justifyContent: "space-between",
+      alignItems: "center"
+    },
 
-  iconeRaio: {
-    fontSize: 32,
-    color: "#171717"
-  },
+    rotuloPrincipal: {
+      fontSize: 16,
+      fontWeight: "600",
+      color: tema.textoRoxo
+    },
 
-  valorPrincipal: {
-    fontSize: 31,
-    fontWeight: "700",
-    color: "#171717"
-  },
+    iconeRaio: {
+      fontSize: 32,
+      color: tema.texto
+    },
 
-  detalheRoxo: {
-    fontSize: 12,
-    color: "#65558C"
-  },
-  tituloGrafico: {
-  fontSize: 14,
-  fontWeight: "600",
-  color: "#292044",
-  marginTop: 8
-},
+    valorPrincipal: {
+      fontSize: 31,
+      fontWeight: "700",
+      color: tema.texto
+    },
 
-  grafico: {
-    backgroundColor: "#FFFFFF",
-    borderRadius: 15,
-    padding: 15,
-    marginTop: 8,
-    height: 145,
-    flexDirection: "row",
-    justifyContent: "space-around",
-    alignItems: "flex-end"
-  },
+    detalheRoxo: {
+      fontSize: 12,
+      color: tema.textoRoxo
+    },
 
-  colunaGrafico: {
-    alignItems: "center",
-    justifyContent: "flex-end",
-    flex: 1,
-    height: "100%",
-    gap: 5
-  },
+    tituloGrafico: {
+      fontSize: 14,
+      fontWeight: "600",
+      color: tema.textoRoxo,
+      marginTop: 8
+    },
 
-  barraGrafico: {
-    width: 22,
-    maxHeight: 105,
-    backgroundColor: "#83BF55",
-    borderRadius: 10
-  },
+    grafico: {
+      backgroundColor: tema.cartao,
+      borderRadius: 15,
+      padding: 15,
+      marginTop: 8,
+      height: 145,
+      flexDirection: "row",
+      justifyContent: "space-around",
+      alignItems: "flex-end"
+    },
 
-  textoGrafico: {
-    fontSize: 9,
-    color: "#777777"
-  },
+    colunaGrafico: {
+      alignItems: "center",
+      justifyContent: "flex-end",
+      flex: 1,
+      height: "100%",
+      gap: 5
+    },
 
-  linhaCartoes: {
-    flexDirection: "row",
-    gap: 12
-  },
+    barraGrafico: {
+      width: 22,
+      maxHeight: 105,
+      backgroundColor: tema.verde,
+      borderRadius: 10
+    },
 
-  cartaoEscuro: {
-    flex: 1,
-    backgroundColor: "#292929",
-    borderRadius: 17,
-    padding: 16,
-    gap: 10
-  },
+    textoGrafico: {
+      fontSize: 9,
+      color: tema.textoSecundario
+    },
 
-  cartaoVerde: {
-    flex: 1,
-    backgroundColor: "#83BF55",
-    borderRadius: 17,
-    padding: 16,
-    gap: 10
-  },
+    linhaCartoes: {
+      flexDirection: "row",
+      gap: 12
+    },
 
-  rotuloCartaoClaro: {
-    color: "#FFFFFF",
-    fontSize: 12
-  },
+    cartaoEscuro: {
+      flex: 1,
+      backgroundColor: tema.escuro,
+      borderRadius: 17,
+      padding: 16,
+      gap: 10
+    },
 
-  valorCartaoClaro: {
-    color: "#FFFFFF",
-    fontSize: 20,
-    fontWeight: "700"
-  },
+    cartaoVerde: {
+      flex: 1,
+      backgroundColor: tema.verde,
+      borderRadius: 17,
+      padding: 16,
+      gap: 10
+    },
 
-  cartaoPrevisao: {
-    backgroundColor: "#FFFFFF",
-    borderRadius: 17,
-    padding: 18,
-    gap: 8
-  },
+    rotuloCartaoClaro: {
+      color: "#FFFFFF",
+      fontSize: 12
+    },
 
-  rotulo: {
-    color: "#777777",
-    fontSize: 13
-  },
+    valorCartaoClaro: {
+      color: "#FFFFFF",
+      fontSize: 20,
+      fontWeight: "700"
+    },
 
-  valorPrevisao: {
-    color: "#171717",
-    fontSize: 25,
-    fontWeight: "700"
-  },
+    cartaoPrevisao: {
+      backgroundColor: tema.cartao,
+      borderRadius: 17,
+      padding: 18,
+      gap: 8
+    },
 
-  detalhe: {
-    color: "#888888",
-    fontSize: 11
-  },
+    rotulo: {
+      color: tema.textoSecundario,
+      fontSize: 13
+    },
 
-  cabecalhoLista: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    marginTop: 5
-  },
+    valorPrevisao: {
+      color: tema.texto,
+      fontSize: 25,
+      fontWeight: "700"
+    },
 
-  tituloSecao: {
-    fontSize: 19,
-    fontWeight: "700",
-    color: "#171717"
-  },
+    detalhe: {
+      color: tema.textoSecundario,
+      fontSize: 11
+    },
 
-  linhaLeitura: {
-    backgroundColor: "#FFFFFF",
-    borderRadius: 14,
-    padding: 15,
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center"
-  },
+    cabecalhoLista: {
+      flexDirection: "row",
+      justifyContent: "space-between",
+      alignItems: "center",
+      marginTop: 5
+    },
 
-  informacaoLeitura: {
-    flex: 1,
-    gap: 5
-  },
+    tituloSecao: {
+      fontSize: 19,
+      fontWeight: "700",
+      color: tema.texto
+    },
 
-  aparelho: {
-    fontSize: 14,
-    fontWeight: "600",
-    color: "#292929"
-  },
+    linhaLeitura: {
+      backgroundColor: tema.cartao,
+      borderRadius: 14,
+      padding: 15,
+      flexDirection: "row",
+      justifyContent: "space-between",
+      alignItems: "center"
+    },
 
-  valorLeitura: {
-    fontSize: 13,
-    fontWeight: "700",
-    color: "#292929",
-    textAlign: "right"
-  },
+    informacaoLeitura: {
+      flex: 1,
+      gap: 5
+    },
 
-  alerta: {
-    color: "#B45309",
-    fontSize: 11,
-    textAlign: "right",
-    marginTop: 4
-  }
-});
+    aparelho: {
+      fontSize: 14,
+      fontWeight: "600",
+      color: tema.texto
+    },
+
+    valorLeitura: {
+      fontSize: 13,
+      fontWeight: "700",
+      color: tema.texto
+    },
+
+    alerta: {
+      color: tema.alertaTexto,
+      fontSize: 11,
+      textAlign: "right",
+      marginTop: 4
+    }
+  });
+}

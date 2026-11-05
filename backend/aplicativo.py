@@ -5,13 +5,26 @@ import calendar
 
 import numpy as np
 from fastapi import FastAPI, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
 from sklearn.ensemble import IsolationForest
 from sklearn.linear_model import LinearRegression
 
 from banco import banco_dados
 
+
 api = FastAPI(title="HouseEnergy AI", version="1.0.0")
+
+api.add_middleware(
+    CORSMiddleware,
+    allow_origins=[
+        "http://localhost:8081",
+        "http://127.0.0.1:8081",
+    ],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 
 

@@ -1,5 +1,5 @@
 
-import { temaClaro, temaEscuro } from "../estilos/temas";
+import { usarTema } from "../contextos/TemaContexto";
 import { useCallback, useEffect, useState } from "react";
 import {
   ActivityIndicator,
@@ -67,10 +67,9 @@ const leiturasDemonstrativas: Leitura[] = [
 ];
 
 export default function TelaInicial() {
-  const [modoEscuro, definirModoEscuro] = useState(false);
+  const { modoEscuro, definirModoEscuro, temaAtual } = usarTema();
 
-  const temaAtual = modoEscuro ? temaEscuro : temaClaro;
-  const estilos = criarEstilos(temaAtual);
+const estilos = criarEstilos(temaAtual);
 
   const [resumo, definirResumo] = useState<DadosResumo>(
     resumoDemonstrativo
@@ -303,7 +302,18 @@ export default function TelaInicial() {
   );
 }
 
-function criarEstilos(tema: typeof temaClaro) {
+function criarEstilos(tema: {
+  fundo: string;
+  cartao: string;
+  texto: string;
+  textoSecundario: string;
+  roxo: string;
+  textoRoxo: string;
+  verde: string;
+  escuro: string;
+  alertaFundo: string;
+  alertaTexto: string;
+}) {
   return StyleSheet.create({
     pagina: {
       flex: 1,

@@ -7,7 +7,7 @@ import {
   Text,
   View,
 } from "react-native";
-
+import { Ionicons } from "@expo/vector-icons";
 import { usarDados } from "../../contextos/DadosContexto";
 import { usarTema } from "../../contextos/TemaContexto";
 
@@ -66,7 +66,16 @@ export default function TelaAparelhos() {
       }
     >
       <View style={estilos.cabecalho}>
-        <Text style={estilos.titulo}>Eletrodomésticos</Text>
+        <View style={{ flexDirection: "row", alignItems: "center", gap: 10 }}>
+          <Ionicons
+            name="bulb-outline"
+            size={27}
+            color={temaAtual.textoRoxo}
+          />
+
+          <Text style={estilos.titulo}>Eletrodomésticos</Text>
+        </View>
+
         <Text style={estilos.subtitulo}>
           Aparelhos identificados nas leituras recebidas
         </Text>

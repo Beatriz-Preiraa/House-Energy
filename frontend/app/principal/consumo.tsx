@@ -10,6 +10,7 @@ import {
 
 import { usarDados } from "../../contextos/DadosContexto";
 import { usarTema } from "../../contextos/TemaContexto";
+import { Ionicons } from "@expo/vector-icons";
 
 export default function TelaConsumo() {
   const { temaAtual } = usarTema();
@@ -48,7 +49,15 @@ export default function TelaConsumo() {
       }
     >
       <View style={estilos.cabecalho}>
-        <Text style={estilos.titulo}>Consumo de energia</Text>
+        <View style={{ flexDirection: "row", alignItems: "center", gap: 10 }}>
+          <Ionicons
+            name="flash-outline"
+            size={27}
+            color={temaAtual.textoRoxo}
+          />
+          <Text style={estilos.titulo}>Consumo de energia</Text>
+        </View>
+
         <Text style={estilos.subtitulo}>
           Histórico calculado a partir das leituras registradas
         </Text>
@@ -63,9 +72,9 @@ export default function TelaConsumo() {
           Custo:{" "}
           {resumo
             ? resumo.custo_total_reais.toLocaleString("pt-BR", {
-                style: "currency",
-                currency: "BRL",
-              })
+              style: "currency",
+              currency: "BRL",
+            })
             : "—"}
         </Text>
       </View>

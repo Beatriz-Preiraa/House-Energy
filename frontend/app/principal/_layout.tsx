@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { Tabs, Redirect } from "expo-router";
 import { usarTema } from "../../contextos/TemaContexto";
 import { supabase } from "../../servicos/supabase";
+import { Ionicons } from "@expo/vector-icons";
 
 export default function LayoutPrincipal() {
   const { temaAtual } = usarTema();
@@ -54,10 +55,65 @@ export default function LayoutPrincipal() {
         },
       }}
     >
-      <Tabs.Screen name="index" options={{ title: "Início", tabBarLabel: "Início" }} />
-      <Tabs.Screen name="consumo" options={{ title: "Consumo", tabBarLabel: "Consumo" }} />
-      <Tabs.Screen name="aparelhos" options={{ title: "Aparelhos", tabBarLabel: "Aparelhos" }} />
-      <Tabs.Screen name="configuracoes" options={{ title: "Configurações", tabBarLabel: "Config." }} />
+      <Tabs.Screen
+        name="index"
+        options={{
+          title: "Início",
+          tabBarLabel: "Início",
+          tabBarIcon: ({ size, focused }) => (
+            <Ionicons
+              name={focused ? "home" : "home-outline"}
+              size={size}
+              color={focused ? temaAtual.textoRoxo : temaAtual.textoSecundario}
+            />
+          ),
+        }}
+      />
+
+      <Tabs.Screen
+        name="consumo"
+        options={{
+          title: "Consumo",
+          tabBarLabel: "Consumo",
+          tabBarIcon: ({ size, focused }) => (
+            <Ionicons
+              name={focused ? "flash" : "flash-outline"}
+              size={size}
+              color={focused ? temaAtual.textoRoxo : temaAtual.textoSecundario}
+            />
+          ),
+        }}
+      />
+
+      <Tabs.Screen
+        name="aparelhos"
+        options={{
+          title: "Aparelhos",
+          tabBarLabel: "Aparelhos",
+          tabBarIcon: ({ size, focused }) => (
+            <Ionicons
+              name={focused ? "bulb" : "bulb-outline"}
+              size={size}
+              color={focused ? temaAtual.textoRoxo : temaAtual.textoSecundario}
+            />
+          ),
+        }}
+      />
+
+      <Tabs.Screen
+        name="configuracoes"
+        options={{
+          title: "Configurações",
+          tabBarLabel: "Config.",
+          tabBarIcon: ({ size, focused }) => (
+            <Ionicons
+              name={focused ? "settings" : "settings-outline"}
+              size={size}
+              color={focused ? temaAtual.textoRoxo : temaAtual.textoSecundario}
+            />
+          ),
+        }}
+      />
     </Tabs>
   );
 }

@@ -12,6 +12,7 @@ import { usarTema } from "../../contextos/TemaContexto";
 import { useRouter } from "expo-router";
 import { enderecoApi, verificarApi, EstadoSaude } from "../../servicos/api";
 import { supabase } from "../../servicos/supabase";
+import { Ionicons } from "@expo/vector-icons";
 
 export default function TelaConfiguracoes() {
   const { modoEscuro, definirModoEscuro, temaAtual } = usarTema();
@@ -41,20 +42,20 @@ export default function TelaConfiguracoes() {
     }
   }
   async function sairDaConta() {
-  definirSaindo(true);
-  definirErroSaida("");
+    definirSaindo(true);
+    definirErroSaida("");
 
-  const { error } = await supabase.auth.signOut();
+    const { error } = await supabase.auth.signOut();
 
-  definirSaindo(false);
+    definirSaindo(false);
 
-  if (error) {
-    definirErroSaida("Não foi possível encerrar a sessão.");
-    return;
+    if (error) {
+      definirErroSaida("Não foi possível encerrar a sessão.");
+      return;
+    }
+
+    roteador.replace("/login");
   }
-
-  roteador.replace("/login");
-}
 
   useEffect(() => {
     testarConexao();
@@ -66,7 +67,16 @@ export default function TelaConfiguracoes() {
       contentContainerStyle={estilos.conteudo}
     >
       <View style={estilos.cabecalho}>
-        <Text style={estilos.titulo}>Configurações</Text>
+        <View style={{ flexDirection: "row", alignItems: "center", gap: 10 }}>
+          <Ionicons
+            name="settings-outline"
+            size={27}
+            color={temaAtual.textoRoxo}
+          />
+
+          <Text style={estilos.titulo}>Configurações</Text>
+        </View>
+
         <Text style={estilos.subtitulo}>
           Preferências e conexão do HouseEnergy AI
         </Text>
@@ -136,25 +146,25 @@ export default function TelaConfiguracoes() {
       </View>
 
       <View style={estilos.cartao}>
-  <Text style={estilos.tituloSecao}>Acesso à conta</Text>
-  <Text style={estilos.detalhe}>
-    Encerre sua sessão no HouseEnergy AI.
-  </Text>
+        <Text style={estilos.tituloSecao}>Acesso à conta</Text>
+        <Text style={estilos.detalhe}>
+          Encerre sua sessão no HouseEnergy AI.
+        </Text>
 
-  {erroSaida ? (
-    <Text style={estilos.erro}>{erroSaida}</Text>
-  ) : null}
+        {erroSaida ? (
+          <Text style={estilos.erro}>{erroSaida}</Text>
+        ) : null}
 
-  <Pressable
-    style={estilos.botao}
-    onPress={sairDaConta}
-    disabled={saindo}
-  >
-    <Text style={estilos.textoBotaoPrincipal}>
-      {saindo ? "Saindo..." : "Sair da conta"}
-    </Text>
-  </Pressable>
-</View>
+        <Pressable
+          style={estilos.botao}
+          onPress={sairDaConta}
+          disabled={saindo}
+        >
+          <Text style={estilos.textoBotaoPrincipal}>
+            {saindo ? "Saindo..." : "Sair da conta"}
+          </Text>
+        </Pressable>
+      </View>
 
       <View style={estilos.cartao}>
         <Text style={estilos.tituloSecao}>Atualização dos dados</Text>

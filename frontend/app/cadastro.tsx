@@ -1,6 +1,7 @@
 
 import { useState } from "react";
 import {
+  Image,
   KeyboardAvoidingView,
   Platform,
   Pressable,
@@ -88,6 +89,12 @@ export default function TelaCadastro() {
     >
       <ScrollView contentContainerStyle={estilos.conteudo} keyboardShouldPersistTaps="handled">
         <View style={estilos.cabecalho}>
+          
+          <Image
+            source={require("../assets/imagens/logo-raio2.png")}
+            style={estilos.logo}
+            resizeMode="contain"
+          />
           <Text style={estilos.marca}>HouseEnergy AI</Text>
           <Text style={estilos.titulo}>Criar conta</Text>
           <Text style={estilos.subtitulo}>
@@ -178,9 +185,24 @@ function criarEstilos(tema: any) {
       gap: 20,
     },
     cabecalho: { gap: 9, marginBottom: 4 },
-    marca: { color: tema.verde, fontSize: 15, fontWeight: "700" },
-    titulo: { color: tema.texto, fontSize: 28, fontWeight: "700" },
-    subtitulo: { color: tema.textoSecundario, fontSize: 14, lineHeight: 21 },
+    marca: {
+      color: tema.verde,
+      fontSize: 22,
+      fontWeight: "700",
+      textAlign: "center",
+    },
+    titulo: {
+      color: tema.texto,
+      fontSize: 28,
+      fontWeight: "700",
+      textAlign: "center",
+    },
+    subtitulo: {
+      color: tema.textoSecundario,
+      fontSize: 14,
+      lineHeight: 21,
+      textAlign: "center",
+    },
     cartao: {
       backgroundColor: tema.cartao,
       borderRadius: 18,
@@ -213,6 +235,13 @@ function criarEstilos(tema: any) {
       flexWrap: "wrap",
       gap: 5,
       marginTop: 5,
+    },
+
+    logo: {
+      width: 90,
+      height: 90,
+      alignSelf: "center",
+      marginBottom: 2,
     },
     textoAuxiliar: { color: tema.textoSecundario, fontSize: 12 },
     link: { color: tema.textoRoxo, fontSize: 12, fontWeight: "700" },

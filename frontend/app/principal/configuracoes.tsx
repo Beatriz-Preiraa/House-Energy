@@ -92,15 +92,18 @@ export default function TelaConfiguracoes() {
             </Text>
           </View>
           <Pressable
-            style={[
-              estilos.botaoAlternar,
-              modoEscuro && estilos.botaoAlternarAtivo,
-            ]}
+            style={estilos.botaoAlternar}
             onPress={() => definirModoEscuro(!modoEscuro)}
+            accessibilityRole="button"
+            accessibilityLabel={
+              modoEscuro ? "Ativar tema claro" : "Ativar tema escuro"
+            }
           >
-            <Text style={estilos.textoBotao}>
-              {modoEscuro ? "Ativado" : "Desativado"}
-            </Text>
+            <Ionicons
+              name={modoEscuro ? "sunny" : "moon"}
+              size={24}
+              color={modoEscuro ? temaAtual.alertaTexto : temaAtual.textoRoxo}
+            />
           </Pressable>
         </View>
       </View>
@@ -203,12 +206,16 @@ function criarEstilos(tema: any) {
     informacao: { flex: 1, gap: 5 },
     texto: { color: tema.texto, fontSize: 14, fontWeight: "600" },
     detalhe: { color: tema.textoSecundario, fontSize: 12, lineHeight: 18 },
+
     botaoAlternar: {
-      paddingHorizontal: 12,
-      paddingVertical: 9,
-      borderRadius: 10,
+      width: 44,
+      height: 44,
+      borderRadius: 22,
       backgroundColor: tema.fundo,
+      alignItems: "center",
+      justifyContent: "center",
     },
+    
     botaoAlternarAtivo: { backgroundColor: tema.verde },
     textoBotao: { color: tema.texto, fontSize: 12, fontWeight: "600" },
     endereco: { color: tema.texto, fontSize: 12 },

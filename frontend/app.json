@@ -8,6 +8,9 @@
     "android": {
       "package": "br.com.houseenergy.ai"
     },
-    "plugins": ["expo-router"]
+    "plugins": [
+      "expo-router",
+      "expo-font"
+    ]
   }
 }

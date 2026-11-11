@@ -11,7 +11,8 @@ import {
 
 import { usarDados } from "../../contextos/DadosContexto";
 import { usarTema } from "../../contextos/TemaContexto";
-
+import MedidorEnergia from "../../componentes/MedidorEnergia";
+import { Ionicons } from "@expo/vector-icons";
 const moeda = (valor: number) =>
   valor.toLocaleString("pt-BR", {
     style: "currency",
@@ -80,8 +81,16 @@ export default function TelaInicial() {
         <Pressable
           style={estilos.botaoTema}
           onPress={() => definirModoEscuro(!modoEscuro)}
+          accessibilityRole="button"
+          accessibilityLabel={
+            modoEscuro ? "Ativar tema claro" : "Ativar tema escuro"
+          }
         >
-          <Text style={estilos.iconeTema}>{modoEscuro ? "Claro" : "Escuro"}</Text>
+          <Ionicons
+            name={modoEscuro ? "sunny" : "moon"}
+            size={23}
+            color={modoEscuro ? "#FFD98A" : "#292044"}
+          />
         </Pressable>
       </View>
 
@@ -93,16 +102,25 @@ export default function TelaInicial() {
         </View>
       ) : null}
 
-      <View style={estilos.cartaoConsumo}>
-        <Text style={estilos.rotuloPrincipal}>Consumo total registrado</Text>
+      <View style={estilos.cartao}>
+        <Text style={estilos.tituloSecao}>
+          Consumo total registrado
+        </Text>
+
         {resumo ? (
-          <Text style={estilos.valorPrincipal}>
-            {resumo.consumo_total_kwh.toFixed(2)} kWh
-          </Text>
+          <MedidorEnergia
+            valor={resumo.consumo_total_kwh}
+            meta={60}
+            corTexto={temaAtual.texto}
+            corSecundaria={temaAtual.textoSecundario}
+            corTrilho={temaAtual.fundo}
+            corProgresso="#0878FF"
+          />
         ) : (
           <ActivityIndicator color={temaAtual.textoRoxo} />
         )}
-        <Text style={estilos.detalheRoxo}>
+
+        <Text style={estilos.detalhe}>
           Dados atualizados automaticamente a cada 10 segundos
         </Text>
       </View>
@@ -215,15 +233,20 @@ function criarEstilos(tema: any) {
     },
     saudacao: { fontSize: 23, fontWeight: "700", color: tema.texto },
     data: { fontSize: 13, color: tema.textoSecundario, marginTop: 5 },
+    
     botaoTema: {
-      padding: 10,
-      borderRadius: 12,
+      width: 44,
+      height: 44,
+      borderRadius: 22,
       backgroundColor: tema.cartao,
-      minWidth: 42,
       alignItems: "center",
+      justifyContent: "center",
     },
+
     iconeTema: { fontSize: 12, fontWeight: "600", color: tema.texto },
+
     aviso: { backgroundColor: tema.alertaFundo, padding: 12, borderRadius: 10 },
+    
     textoAviso: { color: tema.alertaTexto, fontSize: 12 },
     cartaoConsumo: {
       backgroundColor: tema.roxo,

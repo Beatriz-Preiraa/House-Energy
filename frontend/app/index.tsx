@@ -3,6 +3,8 @@ import { useEffect, useState } from "react";
 import { Redirect } from "expo-router";
 import { supabase } from "../servicos/supabase";
 
+
+
 export default function Inicio() {
   const [destino, definirDestino] = useState<"/login" | "/principal" | null>(null);
 

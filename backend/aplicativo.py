@@ -2,6 +2,7 @@
 from datetime import datetime, timezone
 from typing import Literal
 import calendar
+from contextlib import asynccontextmanager
 
 import numpy as np
 from fastapi import FastAPI, HTTPException
@@ -12,8 +13,20 @@ from sklearn.linear_model import LinearRegression
 
 from banco import banco_dados
 
+@asynccontextmanager
+async def ciclo_vida(app: FastAPI):
+    from telemetria import iniciar_consumidor
 
-api = FastAPI(title="HouseEnergy AI", version="1.0.0")
+    iniciar_consumidor()
+    print("Consumidor MQTT iniciado automaticamente!")
+
+    yield
+
+api = FastAPI(
+    title="HouseEnergy AI",
+    version="1.0.0",
+    lifespan=ciclo_vida
+)
 
 api.add_middleware(
     CORSMiddleware,

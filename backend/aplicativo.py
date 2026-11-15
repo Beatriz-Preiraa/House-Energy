@@ -159,18 +159,34 @@ def registrar_leitura(dados: LeituraEntrada):
         ) from erro
 
 
+
 def consultar_leituras():
-    resposta = (
-        banco_dados
-        .table("leituras_consumo")
-        .select("*, eletrodomesticos(nome)")
-        .order("data_hora", desc=True)
-        .execute()
-    )
+    registros_banco = []
+    inicio = 0
+    tamanho_lote = 500
+
+    while True:
+        resposta = (
+            banco_dados
+            .table("leituras_consumo")
+            .select("*, eletrodomesticos(nome)")
+            .order("data_hora", desc=True)
+            .order("id", desc=True)
+            .range(inicio, inicio + tamanho_lote - 1)
+            .execute()
+        )
+
+        lote = resposta.data or []
+        registros_banco.extend(lote)
+
+        if len(lote) < tamanho_lote:
+            break
+
+        inicio += tamanho_lote
 
     registros = []
 
-    for leitura in resposta.data:
+    for leitura in registros_banco:
         eletrodomestico = leitura.get("eletrodomesticos") or {}
 
         registros.append({
